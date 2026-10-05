@@ -1,3 +1,9 @@
+import { DefaultLayout } from "../../layouts/DefaultLayout";
+
 export function DetalhesServico() {
-  return <h1>Detalhes do Servicos</h1>;
+  return (
+    <DefaultLayout titulo="Detalhes do Servicos">
+      <></>
+    </DefaultLayout>
+  );
 }

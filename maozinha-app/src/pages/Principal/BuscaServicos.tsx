@@ -1,3 +1,9 @@
+import { DefaultLayout } from "../../layouts/DefaultLayout";
+
 export function BuscaServicos() {
-  return <h1>Buscar Serviços</h1>;
+  return (
+    <DefaultLayout titulo="Buscar Serviços">
+      <></>
+    </DefaultLayout>
+  );
 }

@@ -1,3 +1,9 @@
+import { DefaultLayout } from "../../layouts/DefaultLayout";
+
 export function MeuPerfil() {
-  return <h1>Meu Perfil</h1>;
+  return (
+    <DefaultLayout titulo="Meu Perfil">
+      <></>
+    </DefaultLayout>
+  );
 }
