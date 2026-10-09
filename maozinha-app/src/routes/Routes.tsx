@@ -2,7 +2,6 @@ import { Login } from "../pages/Autenticacao/Login";
 import { Cadastro } from "../pages/Autenticacao/Cadastro";
 import { RecuperarAcesso } from "../pages/Autenticacao/RecuperarAcesso";
 import { Inicio } from "../pages/Principal/Inicio";
-import { ListaServicos } from "../pages/Principal/ListaServicos";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DetalhesServico } from "../pages/Principal/DetalhesServico";
 import { BuscaServicos } from "../pages/Principal/BuscaServicos";
@@ -34,9 +33,8 @@ export function AppRoutes() {
 
         {/*Principal*/}
         <Route path="/" element={<Inicio />} />
-        <Route path="/explorar" element={<ListaServicos />} />
+        <Route path="/explorar" element={<BuscaServicos />} />
         <Route path="/detalhe-servico" element={<DetalhesServico />} />
-        <Route path="/buscar-servico" element={<BuscaServicos />} />
 
         {/*Perfil*/}
         <Route path="/meu-perfil" element={<MeuPerfil />} />
@@ -49,10 +47,10 @@ export function AppRoutes() {
           element={<ServicoConcluido />}
         />
         <Route path="/servico-em-andamento" element={<ServicoEmAndamento />} />
-        <Route path="servico-selecionado" element={<ServicoSelecionado />} />
+        <Route path="/servico-selecionado" element={<ServicoSelecionado />} />
 
         {/*Publicação*/}
-        <Route path="/criar-servico" element={<CriarServico />} />
+        <Route path="/criar" element={<CriarServico />} />
         <Route path="/editar-servico" element={<EditarServico />} />
         <Route
           path="gerenciar-servico-publicado"
