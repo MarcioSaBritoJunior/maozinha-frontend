@@ -63,6 +63,7 @@ export function Header() {
 
           {/* Abas */}
           <Tabs.Root
+            hideBelow="lg"
             value={currentTab}
             variant="plain"
             onValueChange={(details) => {
@@ -86,6 +87,7 @@ export function Header() {
         {/* Botão publicar + Perfil */}
         <HStack gap="5">
           <Button
+            hideBelow="md"
             rounded="13px"
             background="#1F7A50"
             fontSize="15px"

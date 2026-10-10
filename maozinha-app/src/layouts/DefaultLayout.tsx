@@ -1,6 +1,8 @@
-import { Box, Heading, Flex, Container } from "@chakra-ui/react";
+import { Box, Heading, Flex, Container, HStack } from "@chakra-ui/react";
 import type { ReactNode } from "react";
 import { Header } from "../components/Header";
+import { MdOutlineLocationOn } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
 interface IDefaultLayoutProps {
   titulo: string;
@@ -15,6 +17,8 @@ export function DefaultLayout({
   subtituloSuperior,
   subtituloInferior,
 }: IDefaultLayoutProps) {
+  const location = useLocation();
+  const isInicio = location.pathname === "/";
   return (
     <Box
       minH="100vh"
@@ -27,9 +31,12 @@ export function DefaultLayout({
 
       <Container maxW="1200px" mx="auto" px="5" width="100%">
         <Flex gap="2" direction="column" mb="4">
-          {subtituloSuperior && (
-            <Heading size="sm">{subtituloSuperior}</Heading>
-          )}
+          <HStack align="center" fontSize="xl" gap="1">
+            {isInicio && <MdOutlineLocationOn />}
+            {subtituloSuperior && (
+              <Heading size="sm">{subtituloSuperior}</Heading>
+            )}
+          </HStack>
 
           <Heading size="4xl" fontWeight="extrabold">
             {titulo}
