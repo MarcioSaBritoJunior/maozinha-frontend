@@ -1,5 +1,6 @@
-import { Box, Heading, HStack, Stack, Text } from "@chakra-ui/react";
+import { Heading, HStack, Stack, Text } from "@chakra-ui/react";
 import type { ElementType } from "react";
+import { IconTile } from "./IconTile";
 
 interface ITextProps {
   titulo: string;
@@ -9,7 +10,6 @@ interface ITextProps {
   iconColorFillRight: string;
   iconLeft?: ElementType;
   iconRight?: ElementType;
-  iconSize: string;
 }
 export function ButtonBox({
   titulo,
@@ -19,7 +19,6 @@ export function ButtonBox({
   iconColorFillRight,
   iconLeft: IconeEsq,
   iconRight: IconeDir,
-  iconSize,
 }: ITextProps) {
   return (
     <HStack
@@ -40,26 +39,20 @@ export function ButtonBox({
       _active={{ transform: "scale(0.99)" }}
     >
       <HStack width="100%" justifyContent="space-between">
-        <Box
-          width="48px"
-          height="48px"
-          background={iconColorFillLeft}
-          rounded="16px"
-          justifyItems="center"
-          alignContent="center"
-        >
-          {IconeEsq && <IconeEsq size={iconSize} color={iconColorFillRight} />}
-        </Box>
-        <Box
-          width="48px"
-          height="48px"
-          background={iconColorFillRight}
-          rounded="16px"
-          justifyItems="center"
-          alignContent="center"
-        >
-          {IconeDir && <IconeDir size={iconSize} color={iconColorFillLeft} />}
-        </Box>
+        {IconeEsq && (
+          <IconTile
+            icone={IconeEsq}
+            backgroundColor={iconColorFillLeft}
+            iconColor={iconColorFillRight}
+          />
+        )}
+        {IconeDir && (
+          <IconTile
+            icone={IconeDir}
+            backgroundColor={iconColorFillRight}
+            iconColor={iconColorFillLeft}
+          />
+        )}
       </HStack>
       <Stack>
         <Heading size="2xl">{titulo}</Heading>
