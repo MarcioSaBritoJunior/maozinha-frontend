@@ -1,7 +1,6 @@
 import { IconTile } from "@/components/IconTile";
 import { PasswordInput } from "@/components/ui/password-input";
 import {
-  Box,
   Button,
   Field,
   Fieldset,
@@ -14,7 +13,9 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { MdFrontHand, MdNumbers } from "react-icons/md";
+import { MdFrontHand } from "react-icons/md";
+import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
+import { Link as RouterLink } from "react-router-dom";
 
 function Logo() {
   return (
@@ -80,7 +81,11 @@ export function Login() {
             borderRadius="18px"
             shadow="rgba(20, 48, 31, 0.06) 0px 6px 20px"
           >
-            <IconTile icone={MdNumbers} backgroundColor="#E1EFE6" />
+            <IconTile
+              icone={RiNumber1}
+              backgroundColor="#E1EFE6"
+              iconColor="#1C6B43"
+            />
             <Text fontWeight="medium">
               Publique o que precisa, com valor e data
             </Text>
@@ -93,7 +98,11 @@ export function Login() {
             borderRadius="18px"
             shadow="rgba(20, 48, 31, 0.06) 0px 6px 20px"
           >
-            <IconTile icone={MdNumbers} backgroundColor="#E3ECFB" />
+            <IconTile
+              icone={RiNumber2}
+              backgroundColor="#E3ECFB"
+              iconColor="#2B4E8C"
+            />
             <Text fontWeight="medium">
               Escolha entre quem demonstrou interesse
             </Text>
@@ -106,7 +115,11 @@ export function Login() {
             borderRadius="18px"
             shadow="rgba(20, 48, 31, 0.06) 0px 6px 20px"
           >
-            <IconTile icone={MdNumbers} backgroundColor="#F6EFD2" />
+            <IconTile
+              icone={RiNumber3}
+              backgroundColor="#F6EFD2"
+              iconColor="#6C5812"
+            />
             <Text fontWeight="medium">
               Combine pelo WhatsApp e avaliem um ao outro
             </Text>
@@ -156,9 +169,14 @@ export function Login() {
             <Field.Root gap="8px">
               <HStack justify="space-between" w="100%">
                 <Field.Label>Senha</Field.Label>
-                <Link color="#1F7A50" fontSize="14px">
-                  Esqueci minha senha
-                </Link>
+                <RouterLink
+                  aria-label="Ir para recuperar acesso"
+                  to="/recuperar-acesso"
+                >
+                  <Text fontSize="14px" color="#1F7A50">
+                    Esqueci minha senha
+                  </Text>
+                </RouterLink>
               </HStack>
               <PasswordInput
                 variant="subtle"
