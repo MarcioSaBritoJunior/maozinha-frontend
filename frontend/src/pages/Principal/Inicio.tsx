@@ -1,4 +1,4 @@
-import { Flex, Text, HStack } from "@chakra-ui/react";
+import { Flex, Text, HStack, Wrap } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { DefaultLayout } from "../../layouts/DefaultLayout";
 import { ButtonBox } from "@/components/ButtonBox";
@@ -57,35 +57,40 @@ export function Inicio() {
             itemsLabel="coisas"
           />
         </Flex>
-        <Flex>
+        <Flex flexDir="column" gap={10} align="start">
           <SectionHeader titulo="Categorias" />
-        </Flex>
-
-        <Flex flexDir="column" gap={10}>
-          <SectionHeader titulo="Perto de você" linkIsOn={true} />
           <Flex
             flexDirection="column"
             justifyContent="space-between"
             maxW="100%"
           >
             {/** scroll view na horizontal */}
-            <HStack justifyContent="space-between">
+            <Wrap gap={["12px", "24px"]} justify={["center", "flex-start"]}>
               {categories.map((category) => {
                 const IconComponent = category.icon;
                 return (
-                  <Flex flexDir="column" align="center">
+                  <Flex flexDir="column" align="center" gap={2.5}>
                     <IconTile
                       key={category.id ?? category.name}
                       icone={IconComponent}
+                      iconColor={category.iconColor}
+                      backgroundColor={category.bgColor}
+                      ring={true}
+                      borderRadius="50%"
+                      size="70px"
                     />
-                    <Text fontSize="md" textAlign="center">
+                    <Text fontSize="13px" textAlign="center" color="#2A332E">
                       {category.name}
                     </Text>
                   </Flex>
                 );
               })}
-            </HStack>
+            </Wrap>
           </Flex>
+        </Flex>
+
+        <Flex flexDir="column" gap={10}>
+          <SectionHeader titulo="Perto de você" linkIsOn={true} />
         </Flex>
       </Flex>
     </DefaultLayout>

@@ -1,4 +1,11 @@
-import { Box, Heading, Flex, Container, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Flex,
+  Container,
+  HStack,
+  Separator,
+} from "@chakra-ui/react";
 import type { ReactNode } from "react";
 import { Header } from "../components/Header";
 import { MdOutlineLocationOn } from "react-icons/md";
@@ -24,12 +31,11 @@ export function DefaultLayout({
       minH="100vh"
       display="flex"
       flexDirection="column"
-      gap="4"
       background="#F3F4F1"
     >
       <Header />
-
-      <Container maxW="1200px" mx="auto" px="5" width="100%">
+      <Separator />
+      <Container maxW="1200px" mx="auto" px="5" width="100%" marginTop={6}>
         <Flex gap="2" direction="column" mb="4">
           <HStack align="center" fontSize="xl" gap="1">
             {isInicio && <MdOutlineLocationOn />}
