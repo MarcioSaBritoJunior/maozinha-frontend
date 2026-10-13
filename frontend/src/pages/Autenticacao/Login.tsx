@@ -13,26 +13,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { MdFrontHand } from "react-icons/md";
+
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
 import { Link as RouterLink } from "react-router-dom";
-
-function Logo() {
-  return (
-    <HStack gap="10px">
-      <IconTile
-        icone={MdFrontHand}
-        backgroundColor="#1F7A50"
-        iconColor="#fff"
-        size="40px"
-        borderRadius="12px"
-      />
-      <Heading fontWeight="bold" size="xl">
-        mãozinha
-      </Heading>
-    </HStack>
-  );
-}
+import { Logo } from "@/components/Logo";
 
 export function Login() {
   return (
@@ -199,9 +183,11 @@ export function Login() {
             <Separator />
             <HStack fontSize="15px" justify="center">
               <Text fontWeight="lighter">Ainda não tem conta?</Text>
-              <Link color="#1F7A50" fontWeight="medium">
-                Criar conta grátis
-              </Link>
+              <RouterLink to="/cadastro">
+                <Text fontSize="14px" color="#1F7A50" fontWeight="medium">
+                  Criar conta gratis
+                </Text>
+              </RouterLink>
             </HStack>
           </Fieldset.Root>
         </VStack>

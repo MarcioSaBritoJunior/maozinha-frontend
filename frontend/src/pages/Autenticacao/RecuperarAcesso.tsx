@@ -7,31 +7,13 @@ import {
   Heading,
   HStack,
   Input,
-  IconButton,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
 
-import { MdArrowBack, MdFrontHand } from "react-icons/md";
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
-
-function Logo() {
-  return (
-    <HStack gap="10px">
-      <IconTile
-        icone={MdFrontHand}
-        backgroundColor="#1F7A50"
-        iconColor="#fff"
-        size="40px"
-        borderRadius="12px"
-      />
-      <Heading fontWeight="bold" size="xl">
-        mãozinha
-      </Heading>
-    </HStack>
-  );
-}
+import { BackButton } from "@/components/BackButton";
+import { Logo } from "@/components/Logo";
 
 export function RecuperarAcesso() {
   return (
@@ -144,17 +126,7 @@ export function RecuperarAcesso() {
           </VStack>
 
           {/*Botão de voltar */}
-          <RouterLink to="/login" aria-label="Voltar para o login">
-            <IconButton
-              aria-label="arrow-back"
-              rounded="50%"
-              width="44px"
-              background="#fff"
-              color="#000000"
-            >
-              <MdArrowBack />
-            </IconButton>
-          </RouterLink>
+          <BackButton to="login" />
 
           <VStack align="flex-start" gap="8px">
             <Heading size="3xl" fontWeight="bolder">
