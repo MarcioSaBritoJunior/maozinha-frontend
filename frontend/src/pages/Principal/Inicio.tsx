@@ -1,18 +1,19 @@
-import { Flex, Text, HStack, Wrap } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Flex, Text, Wrap } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
 import { DefaultLayout } from "../../layouts/DefaultLayout";
 import { ButtonBox } from "@/components/ButtonBox";
 import { MdFrontHand, MdArrowForward, MdAdd } from "react-icons/md";
 import { SectionHeader } from "@/components/SectionHeader";
 import { categoryService } from "@/services/categoryService";
 import { IconTile } from "@/components/IconTile";
-
-const local: string = "Cohama, São Luís - MA";
-const nomeUsuario: string = "Rianderson";
-const saudacao: string = "Olá, " + nomeUsuario + "! Do que você precisa hoje?";
+import { AuthContext } from "@/contexts/Auth/AuthContext";
 
 export function Inicio() {
   const [categories, setCategories] = useState<any[]>([]);
+  const auth = useContext(AuthContext);
+
+  const saudacao = "Olá, " + auth.user?.name + "! Do que você precisa hoje?";
+  const localizacao = `${auth.user?.neighborhood}, ${auth.user?.city}. `;
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -24,7 +25,7 @@ export function Inicio() {
   }, []);
 
   return (
-    <DefaultLayout titulo={saudacao} subtituloSuperior={local}>
+    <DefaultLayout titulo={saudacao} subtituloSuperior={localizacao}>
       <Flex gap={8} justifyContent="space-between" direction="column">
         <Flex
           gap="4"
@@ -57,6 +58,7 @@ export function Inicio() {
             itemsLabel="coisas"
           />
         </Flex>
+        
         <Flex flexDir="column" gap={10} align="start">
           <SectionHeader titulo="Categorias" />
           <Flex

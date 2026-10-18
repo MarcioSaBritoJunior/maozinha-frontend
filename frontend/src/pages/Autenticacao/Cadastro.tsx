@@ -8,7 +8,6 @@ import {
   Heading,
   HStack,
   Input,
-  Link,
   Separator,
   Text,
   VStack,

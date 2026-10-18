@@ -8,17 +8,51 @@ import {
   Heading,
   HStack,
   Input,
-  Link,
   Separator,
   Text,
   VStack,
 } from "@chakra-ui/react";
 
 import { RiNumber1, RiNumber2, RiNumber3 } from "react-icons/ri";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/contexts/Auth/AuthContext";
 
 export function Login() {
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    if (!email.trim() || !password) {
+      setError("Informe seu e-mail e sua senha.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const isLogged = await auth.signin(email.trim(), password);
+
+      if (isLogged) {
+        navigate("/", { replace: true });
+      } else {
+        setError("Não foi possível entrar. Confira suas credenciais.");
+      }
+    } catch {
+      setError("Não foi possível conectar ao servidor. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Flex
       direction={{ base: "column", md: "row" }}
@@ -147,6 +181,8 @@ export function Login() {
                 rounded="14px"
                 height="54px"
                 px="16px"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Field.Root>
 
@@ -169,14 +205,25 @@ export function Login() {
                 height="54px"
                 px="16px"
                 placeholder="******"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Field.Root>
+
+            {error && (
+              <Text color="red.600" fontSize="sm" role="alert">
+                {error}
+              </Text>
+            )}
 
             <Button
               borderRadius="16px"
               height="56px"
               background="#1F7A50"
               fontWeight="bold"
+              onClick={handleLogin}
+              disabled={loading}
+              loading={loading}
             >
               Entrar
             </Button>
