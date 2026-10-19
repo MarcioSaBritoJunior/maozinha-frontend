@@ -45,3 +45,11 @@ export const logout = (): void => {
   sessionStorage.removeItem("refreshToken");
 };
 
+export const register = async (userData: object) => {
+  try {
+    const response = await api.post("/auth/register", userData);
+    return response.data;
+  } catch (error) {
+    throw new Error("Erro ao cadastrar usuário");
+  }
+};

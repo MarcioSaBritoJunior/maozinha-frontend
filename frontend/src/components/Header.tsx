@@ -11,10 +11,13 @@ import { Tabs, Button, Avatar } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdHome, MdSearch, MdOutlinePerson2 } from "react-icons/md";
 import { IoMdClipboard } from "react-icons/io";
+import { AuthContext } from "@/contexts/Auth/AuthContext";
+import { useContext } from "react";
 
 export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
   const getActiveTab = (pathname: string) => {
     if (
@@ -120,7 +123,7 @@ export function Header() {
               outlineColor="#fff"
               outlineStyle="solid"
             >
-              <Avatar.Fallback name="Rianderson Correa" />
+              <Avatar.Fallback name={auth.user?.name} />
               <Avatar.Image src="" />
             </Avatar.Root>
           </HStack>
