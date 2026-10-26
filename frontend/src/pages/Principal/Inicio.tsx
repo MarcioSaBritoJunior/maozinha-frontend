@@ -13,7 +13,7 @@ export function Inicio() {
   const auth = useContext(AuthContext);
 
   const saudacao = "Olá, " + auth.user?.name + "! Do que você precisa hoje?";
-  const localizacao = `${auth.user?.neighborhood}, ${auth.user?.city}. `;
+  const localizacao = `${auth.user?.neighborhood}, ${auth.user?.city}`;
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -58,7 +58,7 @@ export function Inicio() {
             itemsLabel="coisas"
           />
         </Flex>
-        
+
         <Flex flexDir="column" gap={10} align="start">
           <SectionHeader titulo="Categorias" />
           <Flex

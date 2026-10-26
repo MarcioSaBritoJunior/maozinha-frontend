@@ -86,7 +86,9 @@ export function Cadastro() {
       const isRegistted = await register(userData);
       if (isRegistted) {
         setSuccess("Conta criada com sucesso.");
-        navigate("/", { replace: true });
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 1500);
       } else {
         setErrorEmptyField("Confira suas informações.");
       }
@@ -208,7 +210,7 @@ export function Cadastro() {
           <BackButton to="login" />
 
           {success && (
-            <Alert.Root status="error" title="This is the alert title">
+            <Alert.Root status="success" title="This is the alert title">
               <Alert.Indicator />
               <Alert.Title>{success}</Alert.Title>
             </Alert.Root>
@@ -416,7 +418,7 @@ export function Cadastro() {
               loading={loading}
               onClick={handleRegister}
             >
-              Entrar
+              Cadastrar
             </Button>
             <Separator />
             <HStack fontSize="15px" justify="center">

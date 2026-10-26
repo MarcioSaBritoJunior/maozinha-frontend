@@ -12,7 +12,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 
 interface IDefaultLayoutProps {
-  titulo: string;
+  titulo?: string;
   children: ReactNode;
   subtituloSuperior?: string;
   subtituloInferior?: string;
@@ -35,7 +35,7 @@ export function DefaultLayout({
     >
       <Header />
       <Separator />
-      <Container maxW="1200px" mx="auto" px="5" width="100%" marginTop={6}>
+      <Container maxW="1200px" mx="auto" px="5" width="100%" pt={6} pb={6}>
         <Flex gap="2" direction="column" mb="4">
           <HStack align="center" fontSize="xl" gap="1">
             {isInicio && <MdOutlineLocationOn />}

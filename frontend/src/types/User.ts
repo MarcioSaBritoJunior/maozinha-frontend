@@ -9,6 +9,7 @@ export type User = {
   status: string;
   averageRating: number;
   totalReviews: number;
-  createdAt: Date;
-  updatedAt: Date;
+  skills: string[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
 };

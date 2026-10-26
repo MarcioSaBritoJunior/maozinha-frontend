@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import logo from "../assets/Maozinha-favicon.png";
 import { Tabs, Button, Avatar } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import { MdHome, MdSearch, MdOutlinePerson2 } from "react-icons/md";
 import { IoMdClipboard } from "react-icons/io";
 import { AuthContext } from "@/contexts/Auth/AuthContext";
@@ -117,15 +117,21 @@ export function Header() {
             >
               + Publicar serviço
             </Button>
-            <Avatar.Root
-              shape="rounded"
-              size="md"
-              outlineColor="#fff"
-              outlineStyle="solid"
-            >
-              <Avatar.Fallback name={auth.user?.name} />
-              <Avatar.Image src="" />
-            </Avatar.Root>
+            <RouterLink to="/meu-perfil">
+              <Avatar.Root
+                shape="rounded"
+                size="md"
+                outlineColor="#fff"
+                outlineStyle="solid"
+                background="#F6D8C5"
+              >
+                <Avatar.Fallback
+                  name={auth.user?.name}
+                  fontWeight="extrabold"
+                />
+                <Avatar.Image src="" />
+              </Avatar.Root>
+            </RouterLink>
           </HStack>
         </Container>
       </Box>
