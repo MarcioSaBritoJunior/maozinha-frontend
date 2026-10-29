@@ -1,9 +1,476 @@
+import { useEffect, useMemo, useState } from "react";
+import {
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Input,
+  SimpleGrid,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import {
+  MdCalendarToday,
+  MdLocationOn,
+  MdSearch,
+  MdTune,
+  MdStar,
+  MdGridView,
+} from "react-icons/md";
+
 import { DefaultLayout } from "../../layouts/DefaultLayout";
 
+import {
+  categoryService,
+  type IServiceCategory,
+} from "../../services/categoryService";
+import { serviceService, type IServico } from "../../services/serviceService";
+
+type Ordenacao = "recentes" | "maior-preco" | "menor-preco" | "mais-proximo";
+
 export function BuscaServicos() {
+  const [servicos, setServicos] = useState<IServico[]>([]);
+  const [categorias, setCategorias] = useState<IServiceCategory[]>([]);
+  const [busca, setBusca] = useState("");
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<
+    number | null
+  >(null);
+  const [bairroSelecionado, setBairroSelecionado] = useState("");
+  const [ordenacao, setOrdenacao] = useState<Ordenacao>("recentes");
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    async function carregarDados() {
+      try {
+        const [listaServicos, listaCategorias] = await Promise.all([
+          serviceService.getServicos(),
+          categoryService.getCategories(),
+        ]);
+
+        setServicos(listaServicos);
+        setCategorias(listaCategorias);
+      } catch (error) {
+        console.error("Erro ao carregar a lista de serviços:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+    carregarDados();
+  }, []);
+
+  const bairros = useMemo(
+    () =>
+      [
+        ...new Set(
+          servicos
+            .filter((servico) => servico.status === "disponivel")
+            .map((servico) => servico.bairro),
+        ),
+      ].sort((a, b) => a.localeCompare(b, "pt-BR")),
+    [servicos],
+  );
+
+  const servicosFiltrados = useMemo(() => {
+    const termo = busca.trim().toLocaleLowerCase("pt-BR");
+
+    const resultado = servicos.filter((servico) => {
+      const categoria = categorias.find(
+        (item) => item.id === servico.categoriaId,
+      );
+
+      const correspondeBusca =
+        !termo ||
+        servico.titulo.toLocaleLowerCase("pt-BR").includes(termo) ||
+        servico.descricao.toLocaleLowerCase("pt-BR").includes(termo) ||
+        servico.bairro.toLocaleLowerCase("pt-BR").includes(termo) ||
+        categoria?.name.toLocaleLowerCase("pt-BR").includes(termo);
+
+      const correspondeCategoria =
+        categoriaSelecionada === null ||
+        servico.categoriaId === categoriaSelecionada;
+
+      const correspondeBairro =
+        !bairroSelecionado || servico.bairro === bairroSelecionado;
+
+      return (
+        servico.status === "disponivel" &&
+        correspondeBusca &&
+        correspondeCategoria &&
+        correspondeBairro
+      );
+    });
+
+    return resultado.sort((a, b) => {
+      if (ordenacao === "menor-preco") {
+        return a.valor - b.valor;
+      }
+      if (ordenacao === "maior-preco") {
+        return b.valor - a.valor;
+      }
+
+      return (
+        new Date(b.dataServicoPostado).getTime() -
+        new Date(a.dataServicoPostado).getTime()
+      );
+    });
+  }, [
+    servicos,
+    categorias,
+    busca,
+    categoriaSelecionada,
+    bairroSelecionado,
+    ordenacao,
+  ]);
+
+  function formataValor(valor: number): string {
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+
+  function formataData(data: string): string {
+    const [ano, mes, dia] = data.split("-").map(Number);
+
+    return new Date(ano, mes - 1, dia)
+      .toLocaleDateString("pt-BR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(".", "");
+  }
+
   return (
-    <DefaultLayout titulo="Buscar Serviços">
-      <></>
+    <DefaultLayout
+      titulo="Encontre um serviço"
+      subtituloInferior={`${servicosFiltrados.length} ${
+        servicosFiltrados.length === 1
+          ? "serviço disponível"
+          : "serviços disponíveis"
+      } em São Luís - MA`}
+    >
+      <VStack align="stretch" gap={5} pb={8}>
+        {/* Busca e filtros */}
+        <Flex gap={2} direction={{ base: "column", md: "row" }}>
+          <HStack
+            flex={1}
+            bg="white"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="xl"
+            px={3}
+            gap={2}
+          >
+            <MdSearch size={22} color="#65716A" />
+
+            <Input
+              value={busca}
+              onChange={(event) => setBusca(event.target.value)}
+              placeholder="Buscar: montagem, faxina, Cohama..."
+              variant="flushed"
+              border="none"
+              _focusVisible={{ boxShadow: "none" }}
+              aria-label="Buscar serviços"
+            />
+          </HStack>
+
+          <Button
+            variant="outline"
+            bg="white"
+            borderColor="gray.200"
+            borderRadius="xl"
+            onClick={() => setMostrarFiltros(!mostrarFiltros)}
+          >
+            <MdTune />
+            Filtros
+          </Button>
+        </Flex>
+
+        {/* Filtros adicionais */}
+        {mostrarFiltros && (
+          <Flex
+            bg="white"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="xl"
+            p={4}
+            gap={4}
+            direction={{ base: "column", sm: "row" }}
+          >
+            <Box flex={1}>
+              <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                Bairro
+              </Text>
+
+              <select
+                value={bairroSelecionado}
+                onChange={(event) => setBairroSelecionado(event.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: "8px",
+                  backgroundColor: "white",
+                }}
+              >
+                <option value="">Todos os bairros</option>
+
+                {bairros.map((bairro) => (
+                  <option key={bairro} value={bairro}>
+                    {bairro}
+                  </option>
+                ))}
+              </select>
+            </Box>
+
+            <Box flex={1}>
+              <Text fontSize="sm" fontWeight="semibold" mb={2}>
+                Ordenar por
+              </Text>
+
+              <select
+                value={ordenacao}
+                onChange={(event) =>
+                  setOrdenacao(event.target.value as Ordenacao)
+                }
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: "8px",
+                  backgroundColor: "white",
+                }}
+              >
+                <option value="recentes">Data mais recente</option>
+                <option value="menor-preco">Menor preço</option>
+                <option value="maior-preco">Maior preço</option>
+              </select>
+            </Box>
+
+            <Button
+              alignSelf={{ base: "stretch", sm: "end" }}
+              variant="ghost"
+              onClick={() => {
+                setBairroSelecionado("");
+                setOrdenacao("recentes");
+                setCategoriaSelecionada(null);
+                setBusca("");
+              }}
+            >
+              Limpar filtros
+            </Button>
+          </Flex>
+        )}
+
+        {/* Categorias */}
+        <Flex gap={2} overflowX="auto" pb={2}>
+          <Button
+            flexShrink={0}
+            borderRadius="full"
+            bg={categoriaSelecionada === null ? "#202722" : "white"}
+            color={categoriaSelecionada === null ? "white" : "#303B34"}
+            border="1px solid"
+            borderColor={categoriaSelecionada === null ? "#202722" : "gray.200"}
+            onClick={() => setCategoriaSelecionada(null)}
+          >
+            <MdGridView />
+            Todas
+          </Button>
+
+          {categorias.map((categoria) => {
+            const CategoriaIcon = categoria.icon;
+            const selecionada = categoriaSelecionada === categoria.id;
+
+            return (
+              <Button
+                key={categoria.id}
+                flexShrink={0}
+                borderRadius="full"
+                variant="outline"
+                bg={selecionada ? categoria.bgColor : "white"}
+                color="#303B34"
+                borderColor={selecionada ? categoria.iconColor : "gray.200"}
+                onClick={() =>
+                  setCategoriaSelecionada(selecionada ? null : categoria.id)
+                }
+              >
+                {CategoriaIcon && <CategoriaIcon />}
+                {categoria.name}
+              </Button>
+            );
+          })}
+        </Flex>
+
+        {/* Lista de serviços */}
+        {carregando ? (
+          <Text color="gray.600" py={8} textAlign="center">
+            Carregando serviços...
+          </Text>
+        ) : servicosFiltrados.length === 0 ? (
+          <Box
+            bg="white"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="2xl"
+            p={10}
+            textAlign="center"
+          >
+            <Heading size="md" mb={2}>
+              Nenhum serviço encontrado
+            </Heading>
+
+            <Text color="gray.600">
+              Tente mudar a busca ou selecionar outra categoria.
+            </Text>
+
+            <Button
+              mt={4}
+              bg="#197B50"
+              color="white"
+              onClick={() => {
+                setBusca("");
+                setCategoriaSelecionada(null);
+                setBairroSelecionado("");
+              }}
+            >
+              Ver todos os serviços
+            </Button>
+          </Box>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={4}>
+            {servicosFiltrados.map((servico) => {
+              const categoria = categorias.find(
+                (item) => item.id === servico.categoriaId,
+              );
+
+              return (
+                <Box
+                  key={servico.id}
+                  bg="white"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  borderRadius="2xl"
+                  p={4}
+                  boxShadow="0 5px 16px rgba(24, 39, 30, 0.05)"
+                  display="flex"
+                  flexDirection="column"
+                  gap={3}
+                  minW={0}
+                  transition="transform 0.2s, box-shadow 0.2s"
+                  _hover={{
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 8px 22px rgba(24, 39, 30, 0.09)",
+                  }}
+                >
+                  {/* Categoria */}
+                  <HStack justify="space-between" align="start">
+                    <Badge
+                      borderRadius="full"
+                      px={2.5}
+                      py={1}
+                      bg={categoria?.bgColor ?? "#E8ECE8"}
+                      color="#37463B"
+                      whiteSpace="normal"
+                    >
+                      {categoria?.name ?? "Outros"}
+                    </Badge>
+                  </HStack>
+
+                  {/* Título e valor */}
+                  <Box>
+                    <Heading
+                      size="md"
+                      fontWeight="semibold"
+                      lineHeight="1.4"
+                      minH={{ base: "auto", md: "48px" }}
+                      mb={2}
+                    >
+                      {servico.titulo}
+                    </Heading>
+
+                    <Text color="#185B3E" fontSize="2xl" fontWeight="bold">
+                      {formataValor(servico.valor)}
+                    </Text>
+                  </Box>
+
+                  {/* Data e localização */}
+                  <VStack align="stretch" gap={1} color="#58665D">
+                    <HStack gap={2} align="start">
+                      <Box mt="3px" flexShrink={0}>
+                        <MdCalendarToday size={16} />
+                      </Box>
+
+                      <Text fontSize="sm">
+                        {formataData(servico.dataServicoPostado)}
+                      </Text>
+                    </HStack>
+
+                    <HStack gap={2} align="start">
+                      <Box mt="3px" flexShrink={0}>
+                        <MdLocationOn size={17} />
+                      </Box>
+
+                      <Text fontSize="sm">
+                        {servico.bairro}, {servico.cidade} - MA
+                      </Text>
+                    </HStack>
+                  </VStack>
+
+                  {/* Prestador */}
+                  <Flex
+                    mt="auto"
+                    pt={3}
+                    borderTop="1px solid"
+                    borderColor="gray.100"
+                    align="center"
+                    justify="space-between"
+                    gap={2}
+                  >
+                    <HStack gap={2} minW={0}>
+                      <Flex
+                        w="32px"
+                        h="32px"
+                        flexShrink={0}
+                        borderRadius="lg"
+                        bg="#DCECE2"
+                        color="#20583D"
+                        align="center"
+                        justify="center"
+                        fontSize="xs"
+                        fontWeight="bold"
+                      >
+                        {servico.nomeUsuario
+                          .split(" ")
+                          .slice(0, 2)
+                          .map((parte) => parte[0])
+                          .join("")
+                          .toUpperCase()}
+                      </Flex>
+
+                      <Text fontSize="sm" fontWeight="medium" truncate>
+                        {servico.nomeUsuario}
+                      </Text>
+                    </HStack>
+
+                    <HStack gap={1} flexShrink={0}>
+                      <MdStar color="#E9A008" size={17} />
+
+                      <Text fontSize="sm" fontWeight="semibold">
+                        —
+                      </Text>
+                    </HStack>
+                  </Flex>
+                </Box>
+              );
+            })}
+          </SimpleGrid>
+        )}
+      </VStack>
     </DefaultLayout>
   );
 }

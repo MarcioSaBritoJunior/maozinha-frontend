@@ -40,7 +40,7 @@ export function AppRoutes() {
           {/*Principal*/}
           <Route path="/" element={<Inicio />} />
           <Route path="/explorar" element={<BuscaServicos />} />
-          <Route path="/detalhe-servico" element={<DetalhesServico />} />
+          <Route path="/detalhe-servico/:id" element={<DetalhesServico />} />
 
           {/*Perfil*/}
           <Route path="/meu-perfil" element={<MeuPerfil />} />
