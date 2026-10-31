@@ -10,6 +10,7 @@ interface ITextProps {
   iconColorFillRight: string;
   iconLeft?: ElementType;
   iconRight?: ElementType;
+  onClick?: () => void;
 }
 export function ButtonBox({
   titulo,
@@ -19,11 +20,12 @@ export function ButtonBox({
   iconColorFillRight,
   iconLeft: IconeEsq,
   iconRight: IconeDir,
+  onClick,
 }: ITextProps) {
   return (
     <HStack
       as="button"
-      onClick={() => ""}
+      onClick={onClick}
       cursor="pointer"
       textAlign="left"
       border="none"

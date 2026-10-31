@@ -7,6 +7,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { categoryService } from "@/services/categoryService";
 import { IconTile } from "@/components/IconTile";
 import { AuthContext } from "@/contexts/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Inicio() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -14,6 +15,8 @@ export function Inicio() {
 
   const saudacao = "Olá, " + auth.user?.name + "! Do que você precisa hoje?";
   const localizacao = `${auth.user?.neighborhood}, ${auth.user?.city}`;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -40,6 +43,7 @@ export function Inicio() {
             backgrundColor="#DDEEE3"
             titulo="Preciso de uma mãozinha"
             subtitulo="Publique um serviço com valor, data e bairro. Quem puder ajudar demonstra interesse."
+            onClick={() => navigate("/criar")}
           />
           <ButtonBox
             iconLeft={MdFrontHand}
@@ -48,7 +52,7 @@ export function Inicio() {
             iconColorFillRight="#ffffff"
             backgrundColor="#F5ECD2"
             titulo="Quero dar uma mãozinha"
-            subtitulo="Veja serviços perto de você e demonstre interesse no valor anunciado."
+            subtitulo="Veja serviços perto de você e escolha, dentre os serviços anunciados, aqueles para os quais pode dar uma mãozinha."
           />
         </Flex>
         <Flex>
