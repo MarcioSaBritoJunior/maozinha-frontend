@@ -1,15 +1,26 @@
+import { api } from "./api";
 export interface IServico {
     id: string;
     titulo: string;
     descricao: string;
     categoriaId: number;
     valor: number;
-    bairro: string;
     cidade: string;
+    bairro: string;
     dataServicoPostado: string;
     status: "disponivel" | "em_andamento" | "concluido" | "cancelado";
     usuarioId: string;
     nomeUsuario: string;
+}
+
+export interface ICriarServico {
+  title: string;
+  description: string;
+  categoryId: number;
+  value: number;
+  city: string;
+  neighborhood: string;
+  serviceDate: string;
 }
 
 // Simulação de dados de serviços para teste da listagem
@@ -58,5 +69,11 @@ let servicos: IServico[] = [
 export const serviceService = {
     getServicos: async (): Promise<IServico[]> => {
         return servicos;
-    }
+    },
+    
+    createServico: async (dados: ICriarServico) => {
+      //console.log("Dados enviados:", dados); DEBUG
+      const response = await api.post("/services", dados);
+      return response.data;
+    },
 }
