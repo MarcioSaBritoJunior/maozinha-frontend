@@ -23,7 +23,30 @@ export interface ICriarServico {
   serviceDate: string;
 }
 
-// Simulação de dados de serviços para teste da listagem
+export interface IServicoDetalhes {
+  id: number;
+  title: string;
+  description: string;
+  categoryId: number;
+  value: number;
+  city: string;
+  neighborhood: string;
+  serviceDate: string;
+  status: "EM ABERTO" | "SELECIONADO" | "EM ANDAMENTO" | "CONCLUÍDO" | "CANCELADO";
+  requesterId: number;
+  requesterName: string;
+  categoryName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IAtualizarServico {
+  
+}
+
+//export interface ICancelarServico {}
+
+// Simulação de dados de serviços para teste da listagem na forma inicial
 let servicos: IServico[] = [
     {
     id: "1",
@@ -74,6 +97,11 @@ export const serviceService = {
     createServico: async (dados: ICriarServico) => {
       //console.log("Dados enviados:", dados); DEBUG
       const response = await api.post("/services", dados);
+      return response.data;
+    },
+
+    getServicoPorId: async (id: number): Promise<IServicoDetalhes> => {
+      const response = await api.get<IServicoDetalhes>(`/services/${id}`);
       return response.data;
     },
 }
