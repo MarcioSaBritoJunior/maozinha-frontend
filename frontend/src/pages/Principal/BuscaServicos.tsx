@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+
 import { Badge, Box, Button,Flex, Heading, HStack, Input, SimpleGrid, Text, VStack, } from "@chakra-ui/react";
 import { MdCalendarToday, MdLocationOn, MdSearch, MdTune, MdStar, MdGridView,} from "react-icons/md";
-
 import { DefaultLayout } from "../../layouts/DefaultLayout";
 
 import { categoryService, type IServiceCategory, } from "../../services/categoryService";

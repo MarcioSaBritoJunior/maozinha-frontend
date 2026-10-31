@@ -60,7 +60,7 @@ export function AppRoutes() {
 
           {/*Publicação*/}
           <Route path="/criar" element={<CriarServico />} />
-          <Route path="/editar-servico" element={<EditarServico />} />
+          <Route path="/editar-servico/:id" element={<EditarServico />} />
           <Route
             path="gerenciar-servico-publicado"
             element={<GerenciarServicoPublicado />}

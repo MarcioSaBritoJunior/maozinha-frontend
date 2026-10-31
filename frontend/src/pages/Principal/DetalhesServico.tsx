@@ -9,12 +9,11 @@ import { serviceService, type IServicoDetalhes } from "../../services/serviceSer
 
 export function DetalhesServico() {
   const { id } = useParams<{ id: string }>();
-  
+  const navigate = useNavigate();
+
   const [servico, setServico] = useState<IServicoDetalhes | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [mensagemErro, setMensagemErro] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function carregarDetalhes() {
@@ -68,7 +67,7 @@ export function DetalhesServico() {
   };
 
   return (
-    <DefaultLayout titulo="Detalhes do serviço">
+    <DefaultLayout titulo="Detalhes do Serviço">
       <Box width="100%" maxW="1000px" mx="auto" pt={6} pb={{ base: 12, md: 6 }} px={{ base: 1, md: 0 }}>
         {carregando ? (
           <VStack py={16} gap={4}>

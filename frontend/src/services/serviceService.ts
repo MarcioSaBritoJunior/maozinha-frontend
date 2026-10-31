@@ -41,7 +41,14 @@ export interface IServicoDetalhes {
 }
 
 export interface IAtualizarServico {
-  
+  title: string;
+  description: string;
+  categoryId: number;
+  value: number;
+  city: string;
+  neighborhood: string;
+  serviceDate: string;
+  status: IServicoDetalhes["status"];
 }
 
 //export interface ICancelarServico {}
@@ -103,5 +110,16 @@ export const serviceService = {
     getServicoPorId: async (id: number): Promise<IServicoDetalhes> => {
       const response = await api.get<IServicoDetalhes>(`/services/${id}`);
       return response.data;
+    },
+
+    //getServicos
+
+    updateServico: async (id: number, dados: IAtualizarServico) => {
+      const response = await api.put(`/services/${id}`, dados);
+      return response.data;
+    },
+
+    cancelarServico: async (id: string | number) => {
+      await api.delete(`/services/${id}`);
     },
 }
